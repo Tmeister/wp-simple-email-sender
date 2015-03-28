@@ -15,7 +15,7 @@
  * Plugin Name:       WP Simple Mail Sender
  * Plugin URI:        https://wordpress.org/plugins/wp-simple-mail-sender
  * Description:       WP Simple Mail Sender is a very simple plugin to change the sender address and name in outgoing emails, you can use the Site Title and the Admin Email or custom values.
- * Version:           1.0.0
+ * Version:           1.0.2
  * Author:            Enrique Chavez
  * Author URI:        http://tmeister.net
  * Text Domain:       wp-simple-mail-sender-locale
