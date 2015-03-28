@@ -23,6 +23,7 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/tmeister/wp-simple-email-sender
+ * Github Branch:     master
  * WordPress-Plugin-Boilerplate: v2.6.1
  */
 
