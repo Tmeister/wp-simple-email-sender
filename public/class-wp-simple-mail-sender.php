@@ -18,6 +18,7 @@
  *
  * @package WpSimpleMailSender
  * @author  Enrique Chavez <noone@tmeister.net>
+ * @author Mika Wenell <mika.wenell@uniwaves.com>
  */
 class WpSimpleMailSender {
 
@@ -61,6 +62,7 @@ class WpSimpleMailSender {
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 		add_filter( 'wp_mail_from', array($this, 'change_mail_from') );
 		add_filter( 'wp_mail_from_name', array($this, 'change_mail_name') );
+        add_filter( 'wp_mail', array($this, 'change_reply') );
 	}
 
 	/**
@@ -143,6 +145,31 @@ class WpSimpleMailSender {
 		}
 
 		return $name;
+
+	}
+
+	/**
+	 * Change the mail from value
+	 *
+	 * @since 1.1.0
+	 */
+	public function change_reply($args){
+		$settings = (array) get_option( 'wses-main-options' );
+
+		if( isset( $settings['reply-to-address'] ) && strlen($settings['reply-to-address']) ){
+            // Reply-to address exists, insert it into header string
+            $reply = (isset($settings['reply-to-address']) ? $settings['reply-to-address'] : '');
+            if($reply != ''){
+                if(preg_match($replyRegex, $args['headers']) == 1){
+                    // Header contains already reply-to => replace it
+                    $args['headers'] = preg_replace($replyRegex, $reply, $args['headers']);
+                } else {
+                    // Header does not contain reply-to yet => add it to end of header
+                    $args['headers'] .= ($args['headers'] != '' ? "\r\n" : '') . 'Reply-To: ' . $reply;
+                }
+            }
+		}
+		return $args;
 
 	}
 }
