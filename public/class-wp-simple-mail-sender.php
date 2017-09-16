@@ -155,21 +155,27 @@ class WpSimpleMailSender {
 	 */
 	public function change_reply($args){
 		$settings = (array) get_option( 'wses-main-options' );
-
-		if( isset( $settings['reply-to-address'] ) && strlen($settings['reply-to-address']) ){
-            // Reply-to address exists, insert it into header string
-            $reply = (isset($settings['reply-to-address']) ? $settings['reply-to-address'] : '');
-            if($reply != ''){
-                if(preg_match($replyRegex, $args['headers']) == 1){
-                    // Header contains already reply-to => replace it
-                    $args['headers'] = preg_replace($replyRegex, $reply, $args['headers']);
-                } else {
-                    // Header does not contain reply-to yet => add it to end of header
-                    $args['headers'] .= ($args['headers'] != '' ? "\r\n" : '') . 'Reply-To: ' . $reply;
-                }
+		if( isset( $settings['reply-to-address'] ) 
+           && $settings['reply-to-address'] != ''
+           && preg_match('/^[@A-Za-z0-9.,_\-\-= ]+$/', $settings['reply-to-address']) == 1)
+        {
+            // Reply-to address exists, add it
+            $reply = '';
+            if(isset( $settings['reply-to-name'] ) 
+               && $settings['reply-to-name'] != '' 
+               && preg_match('/^[\A\pL+\z :.;,0-9@]+$/', $settings['reply-to-name']) == 1)
+            {
+                $reply = $settings['reply-to-name'] . ' <' . $settings['reply-to-address'] . '>';
+            } else {
+                $reply = $settings['reply-to-address'];
             }
+            if(isset($args['headers'])){
+                $args['headers'] = preg_replace('/^[ \t]*[Rr]eply\-[Tt]o:.*$/m', '', $args['headers']); // Remove existing Reply-To fields
+                if(preg_match('/[\r\n]$/', $args['headers']) != 1)
+                    $args['headers'] .= "\r\n"; // Insert newline if missing
+            }
+            $args['headers'] .= 'Reply-To: ' . $reply . "\r\n"; // Add Reply-To field
 		}
 		return $args;
-
 	}
 }

@@ -66,8 +66,6 @@ class WpSimpleMailSenderAdmin {
 		add_action( 'admin_init', array( $this, 'add_wp_simple_email_settings' ) );
 		add_filter( 'wp_mail_from', array($this, 'change_mail_from') );
 		add_filter( 'wp_mail_from_name', array($this, 'change_mail_name') );
-        add_filter( 'wp_mail', array($this, 'change_reply') );
-
 	}
 
 	/**
@@ -198,7 +196,16 @@ class WpSimpleMailSenderAdmin {
     		'wp-simple-email-sender',
     		'wses-global-options'
     	);
-	}
+
+    	add_settings_field(
+    		'wses-reply-to-name',
+    		__('Reply-to Name', $this->plugin_slug),
+    		array($this, 'reply_name_option_field'),
+    		'wp-simple-email-sender',
+    		'wses-global-options'
+    	);
+
+    }
 
 	/**
 	 * Add Page description
@@ -245,6 +252,19 @@ class WpSimpleMailSenderAdmin {
 		$reply = ( isset($settings['reply-to-address'])) ? esc_attr( $settings['reply-to-address'] ) : false;
 	    $html = '<input type="text" name="wses-main-options[reply-to-address]" value="'.$reply.'" size="60" />';
 	    $html .= '<p class="description">'.__('Ex. my.second@example.com', $this->plugin_slug).'</p>';
+	    echo $html;
+	}
+
+	/**
+	 * Add Reply-to Name Option Field
+	 *
+	 * @since 1.1.1
+	 */
+	public function reply_name_option_field(){
+		$settings = (array) get_option( 'wses-main-options' );
+		$replyName = ( isset($settings['reply-to-name'])) ? esc_attr( $settings['reply-to-name'] ) : false;
+	    $html = '<input type="text" name="wses-main-options[reply-to-name]" value="'.$replyName.'" size="60" />';
+	    $html .= '<p class="description">'.__('Ex. My Reply Name', $this->plugin_slug).'</p>';
 	    echo $html;
 	}
 
@@ -309,30 +329,4 @@ class WpSimpleMailSenderAdmin {
 		return $name;
 
 	}
-
-	/**
-	 * Change the mail from value
-	 *
-	 * @since 1.1.0
-	 */
-	public function change_reply($args){
-		$settings = (array) get_option( 'wses-main-options' );
-
-		if( isset( $settings['reply-to-address'] ) && strlen($settings['reply-to-address']) ){
-            // Reply-to address exists, insert it into header string
-            $reply = (isset($settings['reply-to-address']) ? $settings['reply-to-address'] : '');
-            if($reply != ''){
-                if(preg_match($replyRegex, $args['headers']) == 1){
-                    // Header contains already reply-to => replace it
-                    $args['headers'] = preg_replace($replyRegex, $reply, $args['headers']);
-                } else {
-                    // Header does not contain reply-to yet => add it to end of header
-                    $args['headers'] .= ($args['headers'] != '' ? "\r\n" : '') . 'Reply-To: ' . $reply;
-                }
-            }
-		}
-		return $args;
-
-	}
-
 }
