@@ -223,7 +223,7 @@ class WpSimpleMailSenderAdmin {
 	 */
 	public function from_option_field(){
 		$settings = (array) get_option( 'wses-main-options' );
-		$from = ( isset($settings['from-name'])) ? esc_attr( $settings['from-name'] ) : false;
+		$from = ( isset($settings['from-name']) ? esc_attr( $settings['from-name'] ) : '');
 	    $html = '<input type="text" name="wses-main-options[from-name]" value="'.$from.'" size="60" />';
 	    $html .= '<p class="description">'.__('Ex. John Doe.', $this->plugin_slug).'</p>';
 	    echo $html;
@@ -236,7 +236,7 @@ class WpSimpleMailSenderAdmin {
 	 */
 	public function address_option_field(){
 		$settings = (array) get_option( 'wses-main-options' );
-		$from = ( isset($settings['from-address'])) ? esc_attr( $settings['from-address'] ) : false;
+		$from = ( isset($settings['from-address']) ? esc_attr( $settings['from-address'] ) : '');
 	    $html = '<input type="text" name="wses-main-options[from-address]" value="'.$from.'" size="60" />';
 	    $html .= '<p class="description">'.__('Ex. my@email.com', $this->plugin_slug).'</p>';
 	    echo $html;
@@ -249,8 +249,12 @@ class WpSimpleMailSenderAdmin {
 	 */
 	public function reply_option_field(){
 		$settings = (array) get_option( 'wses-main-options' );
-		$reply = ( isset($settings['reply-to-address'])) ? esc_attr( $settings['reply-to-address'] ) : false;
-	    $html = '<input type="text" name="wses-main-options[reply-to-address]" value="'.$reply.'" size="60" />';
+		$reply = ( isset($settings['reply-to-address']) ? esc_attr( $settings['reply-to-address'] ) : '');
+        $html = '';
+        if($reply != '' && !WpSimpleMailSender::isReplyEmailAddress($reply)){
+            $html .= '<p style="color: red;">' . __('Error: Email has an invalid format and is ignored. Please, change it to valid one.', $this->plugin_slug) . '</p>';
+        }
+	    $html .= '<input type="text" name="wses-main-options[reply-to-address]" value="'.$reply.'" size="60" />';
 	    $html .= '<p class="description">'.__('Ex. my.second@example.com', $this->plugin_slug).'</p>';
 	    echo $html;
 	}
@@ -262,8 +266,12 @@ class WpSimpleMailSenderAdmin {
 	 */
 	public function reply_name_option_field(){
 		$settings = (array) get_option( 'wses-main-options' );
-		$replyName = ( isset($settings['reply-to-name'])) ? esc_attr( $settings['reply-to-name'] ) : false;
-	    $html = '<input type="text" name="wses-main-options[reply-to-name]" value="'.$replyName.'" size="60" />';
+        $replyName = ( isset($settings['reply-to-name']) ? esc_attr( $settings['reply-to-name'] ) : '');
+        $html = '';
+        if($replyName != '' && !WpSimpleMailSender::isReplyName($replyName)){
+            $html .= '<p style="color: red;">' . __('Error: Name has an invalid format and is ignored. Please, change it to valid one.', $this->plugin_slug) . '</p>';
+        }
+	    $html .= '<input type="text" name="wses-main-options[reply-to-name]" value="'.$replyName.'" size="60" />';
 	    $html .= '<p class="description">'.__('Ex. My Reply Name', $this->plugin_slug).'</p>';
 	    echo $html;
 	}

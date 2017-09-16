@@ -157,13 +157,13 @@ class WpSimpleMailSender {
 		$settings = (array) get_option( 'wses-main-options' );
 		if( isset( $settings['reply-to-address'] ) 
            && $settings['reply-to-address'] != ''
-           && preg_match('/^[@A-Za-z0-9.,_\-\-= ]+$/', $settings['reply-to-address']) == 1)
+           && WpSimpleMailSender::isReplyEmailAddress($settings['reply-to-address']))
         {
             // Reply-to address exists, add it
             $reply = '';
             if(isset( $settings['reply-to-name'] ) 
                && $settings['reply-to-name'] != '' 
-               && preg_match('/^[\A\pL+\z :.;,0-9@]+$/', $settings['reply-to-name']) == 1)
+               && WpSimpleMailSender::isReplyName($settings['reply-to-name']))
             {
                 $reply = $settings['reply-to-name'] . ' <' . $settings['reply-to-address'] . '>';
             } else {
@@ -178,4 +178,22 @@ class WpSimpleMailSender {
 		}
 		return $args;
 	}
+    
+    /**
+    * Test the Reply-To Email Adrress
+    *
+    * @since 1.1.2
+    */
+    public static function isReplyEmailAddress($email){
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+    * Test the Reply-To Email Adrress
+    *
+    * @since 1.1.2
+    */
+    public static function isReplyName($name){
+        return preg_match('/^[\A\pL+\z :.;,0-9@#]+$/', $name) == 1;
+    }
 }
