@@ -18,8 +18,12 @@ action "tag" {
 action "archive" {
   uses = "lubusIN/actions/archive@master"
   env = {
-    ZIP_FILENAME = "wp-simple-mail-sender"
+    ARCHIVE_FILENAME = "wp-simple-mail-sender"
   }
+
+  # Install Dependencies
+
+  # Build Plugin
 }
 
 # Publish to wordpress.org repository
