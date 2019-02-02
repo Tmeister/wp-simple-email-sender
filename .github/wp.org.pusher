@@ -41,6 +41,7 @@ action "wordpress" {
     WP_SLUG = "wp-simple-mail-sender"
   }
   secrets = [
+    "WP_USERNAME",
     "WP_PASSWORD",
   ]
 }

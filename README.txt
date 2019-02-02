@@ -3,7 +3,7 @@ Contributors: tmeister
 Donate link: http://tmeister.net/
 Tags: outgoing mail, mail, sender, email, email from address, email, from name
 Requires at least: 3.5.1
-Tested up to: 4.1
+Tested up to: 5.0.3
 Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
