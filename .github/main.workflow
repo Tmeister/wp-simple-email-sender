@@ -10,6 +10,13 @@ action "tag" {
   args = "tag"
 }
 
+# Install Dependencies
+action "install" {
+  uses = "actions/npm@master"
+  needs = "tag"
+  args = "install"
+}
+
 # Create Release ZIP archive
 action "archive" {
   uses = "lubusIN/actions/archive@master"
