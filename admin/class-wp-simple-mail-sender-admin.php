@@ -18,6 +18,7 @@
  *
  * @package WpSimpleMailSenderAdmin
  * @author  Enrique Chavez <noone@tmeister.net>
+ * @author Mika Wenell <mika.wenell@uniwaves.com>
  */
 class WpSimpleMailSenderAdmin {
 
@@ -65,8 +66,6 @@ class WpSimpleMailSenderAdmin {
 		add_action( 'admin_init', array( $this, 'add_wp_simple_email_settings' ) );
 		add_filter( 'wp_mail_from', array($this, 'change_mail_from') );
 		add_filter( 'wp_mail_from_name', array($this, 'change_mail_name') );
-
-
 	}
 
 	/**
@@ -190,7 +189,23 @@ class WpSimpleMailSenderAdmin {
     		'wses-global-options'
     	);
 
-	}
+    	add_settings_field(
+    		'wses-reply-to-address',
+    		__('Reply-to Address', $this->plugin_slug),
+    		array($this, 'reply_option_field'),
+    		'wp-simple-email-sender',
+    		'wses-global-options'
+    	);
+
+    	add_settings_field(
+    		'wses-reply-to-name',
+    		__('Reply-to Name', $this->plugin_slug),
+    		array($this, 'reply_name_option_field'),
+    		'wp-simple-email-sender',
+    		'wses-global-options'
+    	);
+
+    }
 
 	/**
 	 * Add Page description
@@ -198,7 +213,7 @@ class WpSimpleMailSenderAdmin {
 	 * @since 1.0.0
 	 */
 	public function general_settings_option() {
-		echo __('This is a very simple plugin to change the sender address and name when WordPress send an email.', $this->plugin_slug);
+		echo __('This is a very simple plugin to change the sender address and name when WordPress sends an email.', $this->plugin_slug);
 	}
 
 	/**
@@ -208,8 +223,8 @@ class WpSimpleMailSenderAdmin {
 	 */
 	public function from_option_field(){
 		$settings = (array) get_option( 'wses-main-options' );
-		$from = ( isset($settings['from-name'])) ? esc_attr( $settings['from-name'] ) : false;
-	    $html = '<input type="text" name="wses-main-options[from-name]" value="'.$from.'" />';
+		$from = ( isset($settings['from-name']) ? esc_attr( $settings['from-name'] ) : '');
+	    $html = '<input type="text" name="wses-main-options[from-name]" value="'.$from.'" size="60" />';
 	    $html .= '<p class="description">'.__('Ex. John Doe.', $this->plugin_slug).'</p>';
 	    echo $html;
 	}
@@ -221,9 +236,43 @@ class WpSimpleMailSenderAdmin {
 	 */
 	public function address_option_field(){
 		$settings = (array) get_option( 'wses-main-options' );
-		$from = ( isset($settings['from-address'])) ? esc_attr( $settings['from-address'] ) : false;
-	    $html = '<input type="text" name="wses-main-options[from-address]" value="'.$from.'" />';
+		$from = ( isset($settings['from-address']) ? esc_attr( $settings['from-address'] ) : '');
+	    $html = '<input type="text" name="wses-main-options[from-address]" value="'.$from.'" size="60" />';
 	    $html .= '<p class="description">'.__('Ex. my@email.com', $this->plugin_slug).'</p>';
+	    echo $html;
+	}
+
+	/**
+	 * Add Reply-to Option Field
+	 *
+	 * @since 1.1.0
+	 */
+	public function reply_option_field(){
+		$settings = (array) get_option( 'wses-main-options' );
+		$reply = ( isset($settings['reply-to-address']) ? esc_attr( $settings['reply-to-address'] ) : '');
+        $html = '';
+        if($reply != '' && !WpSimpleMailSender::isReplyEmailAddress($reply)){
+            $html .= '<p style="color: red;">' . __('Error: Email has an invalid format and is ignored. Please, change it to valid one.', $this->plugin_slug) . '</p>';
+        }
+	    $html .= '<input type="text" name="wses-main-options[reply-to-address]" value="'.$reply.'" size="60" />';
+	    $html .= '<p class="description">'.__('Ex. my.second@example.com', $this->plugin_slug).'</p>';
+	    echo $html;
+	}
+
+	/**
+	 * Add Reply-to Name Option Field
+	 *
+	 * @since 1.1.1
+	 */
+	public function reply_name_option_field(){
+		$settings = (array) get_option( 'wses-main-options' );
+        $replyName = ( isset($settings['reply-to-name']) ? esc_attr( $settings['reply-to-name'] ) : '');
+        $html = '';
+        if($replyName != '' && !WpSimpleMailSender::isReplyName($replyName)){
+            $html .= '<p style="color: red;">' . __('Error: Name has an invalid format and is ignored. Please, change it to valid one.', $this->plugin_slug) . '</p>';
+        }
+	    $html .= '<input type="text" name="wses-main-options[reply-to-name]" value="'.$replyName.'" size="60" />';
+	    $html .= '<p class="description">'.__('Ex. My Reply Name', $this->plugin_slug).'</p>';
 	    echo $html;
 	}
 
@@ -288,5 +337,4 @@ class WpSimpleMailSenderAdmin {
 		return $name;
 
 	}
-
 }

@@ -18,6 +18,7 @@
  *
  * @package WpSimpleMailSender
  * @author  Enrique Chavez <noone@tmeister.net>
+ * @author Mika Wenell <mika.wenell@uniwaves.com>
  */
 class WpSimpleMailSender {
 
@@ -61,6 +62,7 @@ class WpSimpleMailSender {
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 		add_filter( 'wp_mail_from', array($this, 'change_mail_from') );
 		add_filter( 'wp_mail_from_name', array($this, 'change_mail_name') );
+        add_filter( 'wp_mail', array($this, 'change_reply') );
 	}
 
 	/**
@@ -145,4 +147,53 @@ class WpSimpleMailSender {
 		return $name;
 
 	}
+
+	/**
+	 * Change the mail from value
+	 *
+	 * @since 1.1.0
+	 */
+	public function change_reply($args){
+		$settings = (array) get_option( 'wses-main-options' );
+		if( isset( $settings['reply-to-address'] ) 
+           && $settings['reply-to-address'] != ''
+           && WpSimpleMailSender::isReplyEmailAddress($settings['reply-to-address']))
+        {
+            // Reply-to address exists, add it
+            $reply = '';
+            if(isset( $settings['reply-to-name'] ) 
+               && $settings['reply-to-name'] != '' 
+               && WpSimpleMailSender::isReplyName($settings['reply-to-name']))
+            {
+                $reply = $settings['reply-to-name'] . ' <' . $settings['reply-to-address'] . '>';
+            } else {
+                $reply = $settings['reply-to-address'];
+            }
+            if(isset($args['headers'])){
+                $args['headers'] = preg_replace('/^[ \t]*[Rr]eply\-[Tt]o:.*$/m', '', $args['headers']); // Remove existing Reply-To fields
+                if(preg_match('/[\r\n]$/', $args['headers']) != 1)
+                    $args['headers'] .= "\r\n"; // Insert newline if missing
+            }
+            $args['headers'] .= 'Reply-To: ' . $reply . "\r\n"; // Add Reply-To field
+		}
+		return $args;
+	}
+    
+    /**
+    * Test the Reply-To Email Adrress
+    *
+    * @since 1.1.2
+    */
+    public static function isReplyEmailAddress($email){
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+    * Test the Reply-To Email Adrress
+    *
+    * @since 1.1.2
+    */
+    public static function isReplyName($name){
+        return preg_match('/^[\A\pL+\z :.;,0-9@#]+$/', $name) == 1;
+    }
 }
