@@ -1,0 +1,19 @@
+language: php
+php:
+  - 7.0
+  - 5.6
+script:
+  - php -l *.php
+branches:
+  only:
+    - "/\\d\\.\\d\\.\\d/"
+deploy:
+  provider: script
+  script: deploy/deploy.sh
+  on:
+    tags: true
+env:
+  global:
+    - SVN_REPOSITORY={PLUGIN SVN REPOSITORY URL}
+    - secure: nGTuLLmBa5ENSbulG0Z2HKWOVI7b1de7Cxc4RJ+Cs6z14/5UDcO6NVx8/6+S4FU6KXFLJH6Q7r0Hj2vkwmD8nixVzlU3Zp8tFAxlEZlMEjwlVqim3oqkBYEafeaFZgAachwsb/d793tciz3XYFuMgdiF5DiSoJt6fjakq9gDf4A=
+    - secure: EWiVBKQR0D463dZGP+X1yb5iOb1qNywsmGXKvLP786NQ8twyrvEbz/BrEqx05Bp5okIeNtXnUgNLeT6kRa+vztiq/zVaoxhYUfl1c/42AqsI2DigxTkC19AdIe5THWr1Q+ho6k2AH5CIerSHh3J1zxUW+Y834jAA7U1to336SnQ=
