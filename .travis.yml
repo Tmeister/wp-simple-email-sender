@@ -1,12 +1,12 @@
 language: php
 php:
-  - 7.0
-  - 5.6
+- 7.0
+- 5.6
 script:
-  - php -l *.php
+- php -l *.php
 branches:
   only:
-    - "/\\d\\.\\d\\.\\d/"
+  - "/\\d\\.\\d\\.\\d/"
 deploy:
   provider: script
   script: deploy/deploy.sh
@@ -14,6 +14,6 @@ deploy:
     tags: true
 env:
   global:
-    - SVN_REPOSITORY=https://plugins.svn.wordpress.org/wp-simple-mail-sender/
-    - secure: nGTuLLmBa5ENSbulG0Z2HKWOVI7b1de7Cxc4RJ+Cs6z14/5UDcO6NVx8/6+S4FU6KXFLJH6Q7r0Hj2vkwmD8nixVzlU3Zp8tFAxlEZlMEjwlVqim3oqkBYEafeaFZgAachwsb/d793tciz3XYFuMgdiF5DiSoJt6fjakq9gDf4A=
-    - secure: EWiVBKQR0D463dZGP+X1yb5iOb1qNywsmGXKvLP786NQ8twyrvEbz/BrEqx05Bp5okIeNtXnUgNLeT6kRa+vztiq/zVaoxhYUfl1c/42AqsI2DigxTkC19AdIe5THWr1Q+ho6k2AH5CIerSHh3J1zxUW+Y834jAA7U1to336SnQ=
+  - SVN_REPOSITORY=https://plugins.svn.wordpress.org/wp-simple-mail-sender/
+  - secure: lxWQgvX7zTA9crbhwqM0Z6FqVWNyjI4UGfhkgzmSGLsY+RxFIi53vvFgq812RAsobkZf1sOGBpCOIf9tebE9QelKPwO4ttDuVOtb9TVyOkGy6RYri57hldgzgeZqhhky3u4Eow5RMm89lNwa+rgPEekc/ByAwtUZIb4YpoEJBbc=
+  - secure: krCU8nVR0nRDNGRbeUmzW+jR+1vZaIxSAgaimb98l3f0Sh8xAVgAqJnqk2q2iszhvQIRhBej3NgYJOoL7ESFIrTBnagT8FbTBNnFFUhT6ASwkaxhS/iVjs+M1K8/pXbeNJHV/UlljU8si43fQXrnmbp/iqgEZcFX4ru31xKQvKg=
