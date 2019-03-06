@@ -15,5 +15,5 @@ deploy:
 env:
   global:
   - SVN_REPOSITORY=https://plugins.svn.wordpress.org/wp-simple-mail-sender/
-  - secure: lxWQgvX7zTA9crbhwqM0Z6FqVWNyjI4UGfhkgzmSGLsY+RxFIi53vvFgq812RAsobkZf1sOGBpCOIf9tebE9QelKPwO4ttDuVOtb9TVyOkGy6RYri57hldgzgeZqhhky3u4Eow5RMm89lNwa+rgPEekc/ByAwtUZIb4YpoEJBbc=
-  - secure: krCU8nVR0nRDNGRbeUmzW+jR+1vZaIxSAgaimb98l3f0Sh8xAVgAqJnqk2q2iszhvQIRhBej3NgYJOoL7ESFIrTBnagT8FbTBNnFFUhT6ASwkaxhS/iVjs+M1K8/pXbeNJHV/UlljU8si43fQXrnmbp/iqgEZcFX4ru31xKQvKg=
+  - secure: cA7etr+/EU5BCcC+zkdrII2vn7hSQblSHGqFzgmsh3RhGke1bstRG5xnE/LILXKNfnXnGTlPEABHjw/pfW0UK9yqMOAX9FpVg6x+MSe2jvV4YhI7Ul3dx2JbUUhG6Dw0Vw9nhpIdwS1CkhqT3Z4fYfODqCnqp/Sas21F969Xg9Q=
+  - secure: SbGr8zYe8trDcNylwSL5AUHi5CoIfjJpb34Q82n5mN1P9uQ4Mn7BqFUfJhJxZXodNLgPUkqtku3k1GnbA698HfGqKX8h9Qh+v4l0AnunSuTJRyGId4mvWpg9fP0GDehGvHM6+gjmFonyGeydazbtz21/HVU/fSENv25FodOKI1U=
